@@ -309,22 +309,13 @@ impl ModelSelector {
                 .open_as_popup_above(cx, anchor, 5.0);
         } else {
             let fill = Size::fill();
-            let mut modal = self.moly_modal(cx, ids!(modal));
-            script_apply_eval!(cx, modal, {
-                dismiss_on_focus_lost: false
-            });
             let mut content = self.view(cx, ids!(modal.content));
             script_apply_eval!(cx, content, {
                 width: #(fill)
                 padding: 0
             });
 
-            let screen_size = cx.display_context.screen_size;
-            let pos = DVec2 {
-                x: 0.0,
-                y: screen_size.y,
-            };
-            self.moly_modal(cx, ids!(modal)).open_as_popup(cx, pos);
+            self.moly_modal(cx, ids!(modal)).open_as_bottom_sheet(cx);
         }
     }
 

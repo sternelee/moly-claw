@@ -181,6 +181,20 @@ impl MolyModal {
         self.open(cx);
     }
 
+    /// Opens the modal as a bottom sheet anchored to the bottom of the screen.
+    pub fn open_as_bottom_sheet(&mut self, cx: &mut Cx) {
+        self.view.layout.align = Align { x: 0.0, y: 1.0 };
+
+        let mut content = self.view.widget(cx, ids!(content));
+        script_apply_eval!(cx, content, { margin: 0 });
+
+        let mut bg_view = self.view.widget(cx, ids!(bg_view));
+        script_apply_eval!(cx, bg_view, { visible: true });
+
+        #[allow(deprecated)]
+        self.open(cx);
+    }
+
     /// Opens the modal as a popup at the given position.
     pub fn open_as_popup(&mut self, cx: &mut Cx, pos: DVec2) {
         self.desired_popup_placement = Some(PopupPlacement::AtPosition(pos));
@@ -291,6 +305,13 @@ impl MolyModalRef {
     pub fn open_as_dialog(&self, cx: &mut Cx) {
         if let Some(mut inner) = self.borrow_mut() {
             inner.open_as_dialog(cx);
+        }
+    }
+
+    /// Opens the modal as a bottom sheet anchored to the bottom of the screen.
+    pub fn open_as_bottom_sheet(&self, cx: &mut Cx) {
+        if let Some(mut inner) = self.borrow_mut() {
+            inner.open_as_bottom_sheet(cx);
         }
     }
 
